@@ -216,6 +216,7 @@ export const getAnswerFromDeepSeek = async (model: string, history: MessageParam
         const completion = await openai.chat.completions.create({
             model: "deepseek/deepseek-r1-0528:free",
             messages: custimizedHistory,
+            // max_tokens: 1000,
             
         });
 
@@ -228,7 +229,50 @@ export const getAnswerFromDeepSeek = async (model: string, history: MessageParam
 
 }
 
+// export const getAnswerFromDeepSeek = async (model: string, history: MessageParams[], custimizedUserMessage: string) => {    
 
+//     const token = proccess.env.GITHUP_AI_Key;
+//     const endpoint = "https://models.github.ai/inference";
+//     const model_ = "deepseek/DeepSeek-R1";
+
+//     const client = new OpenAI({ baseURL: endpoint, apiKey: token });
+    
+//     try {
+
+//         const custimizedHistory = [
+
+//             {role: "user", content: primaryPrompt},
+//             {role: "system", content: 'ok i am ready'},
+
+//             ...history.map(item => ({
+//                 role: item.role == 'model' ? 'system' : 'user',
+//                 content: item.parts?.[0]?.text || ""
+//             })) as MessageParamsForChatGPt[],
+
+//             {role: "user", content: custimizedUserMessage}
+
+//         ] as MessageParamsForChatGPt[];
+
+//         const response = await client.chat.completions.create({
+//             messages: [
+//                 ...custimizedHistory,
+//                 {role: "user", content: custimizedUserMessage},
+//             ],
+//             temperature: 1.0,
+//             top_p: 1.0,
+//             max_tokens: 2000,
+//             stream: false,
+//             model: model_
+//         });
+
+//         return response.choices[0].message.content;
+
+//     } catch (err) {
+//         throw error('error while getting answer from deepseek', err);
+//     }
+
+
+// }
 
 export const getMessagesByContent = async (conversationId: string | object, searchTerm: string) => {
 
