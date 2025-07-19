@@ -1,3 +1,4 @@
+import { randomBytes } from "crypto";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
@@ -18,14 +19,14 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
+    token: {
+        type: String,
+        default: () => randomBytes(16).toString('hex'),
+        unique: true,
     },
-    updatedAt: {
-        type: Date,
-        default: Date.now,
-    },
+
+}, {
+  timestamps: true
 });
 
 const User = mongoose.model("User", userSchema);

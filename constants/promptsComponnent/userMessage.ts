@@ -1,6 +1,6 @@
 import { error } from "console";
 import { getNoteByUserId } from "../../controller/aiNote.js";
-import { getConversationLenght } from "../../controller/conversation.js";
+import { getConversationLength } from "../../controller/conversation.js";
 import { AiNoteParams, NoteContentParams } from "../../types.js";
 
 
@@ -45,7 +45,7 @@ export const custimizeUserMessage = async (userId: string | Object, conversation
         }
 
         مكان الرسالة داخل المحادثة  {
-            ${await getConversationLenght(conversationId)}
+            ${await getConversationLength(conversationId)}
         }
 
         تاريخ ارسال الرسالة {

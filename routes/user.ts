@@ -1,34 +1,23 @@
 import express from "express";
-import { createUser } from "../controller/user.js";
 import { UserParams } from "../types.js";
+import User from "../models/user.js";
+import { createUser_, getUserBySignIn_, getUserByToken_ } from "../midController/endPoint/user.js";
 
 const router = express.Router();
 
 router.post("/createUser", async (req, res) => {
-
-    const {name, familyName, email, password} = req.body as unknown as UserParams;
-
-    try {
-        if (!name || !familyName || !email || !password) {
-            res.status(404).json({error: 'All fields are required !'})
-        }
-
-        const newUser = await createUser({
-            name,
-            familyName,
-            email,
-            password
-        });
-
-        res.status(200).json({newUser});
-
-    } catch (err) {
-        res.status(500).json({error: err});
-    }
-
-
+    createUser_(req, res)
 })
 
+// @ts-ignore
+router.get("/getUserBySignIn", async (req, res) => {
+    getUserBySignIn_(req, res);
+})
+
+// @ts-ignore
+router.get("/getUserByToken", async (req, res) => {
+    getUserByToken_(req, res);
+})
 
 
 export default router;

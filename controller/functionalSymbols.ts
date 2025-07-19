@@ -44,7 +44,7 @@ export const checkSymbols = async (response: string) => { console.log({response}
     precedureResult = '<precedureResult></precedureResult>';
 
     if (!response.includes('<')) {
-        setPrecedureResult(`<error> you should use the functional symbols to talk to user </error>`);
+        setPrecedureResult(`<messageFromSystem> this message won't send to the user ! you should use the functional symbols to talk to user ! </messageFromSystem>`);
         return precedureResult;
     }
         
@@ -52,7 +52,7 @@ export const checkSymbols = async (response: string) => { console.log({response}
 
         const hasExtraTag = hasExtraTagInsideMessageToUser(response, '<messageToUser>', '</messageToUser>');
         if (hasExtraTag) {
-            setPrecedureResult(`<error> you can not user another tag with <messageToUser> ! Instead use only the other tag to get the result of it, then use <messageToUser> and tell the user about the result you got . </error>`);
+            setPrecedureResult(`<messageFromSystem> you can not use another tag with <messageToUser> ! Instead use only the other tag to get the result of it, then use <messageToUser> and tell the user about the result you got . </messageFromSystem>`);
             return precedureResult;
         }
 
@@ -64,17 +64,17 @@ export const checkSymbols = async (response: string) => { console.log({response}
         //     return precedureResult;
         // }
         
-        const start = response.indexOf('<messageToUser>') + '<messageToUser>'.length;
-        const end = response.indexOf('</messageToUser>');
-        return response.slice(start, end).trim();
-        // return response;
+        // const start = response.indexOf('<messageToUser>') + '<messageToUser>'.length;
+        // const end = response.indexOf('</messageToUser>');
+        // return response.slice(start, end).trim();
+        return response;
     }
 
     if (response.includes('<tellUserToWait>')) {
 
         const hasExtraTag = hasExtraTagInsideMessageToUser(response, '<tellUserToWait>', '</tellUserToWait>');
         if (hasExtraTag) {
-            setPrecedureResult(`<error> you can not user another tag with <tellUserToWait> ! Instead use only the other tag to get the result of it, then use <tellUserToWait> and tell the user about the result you got . </error>`);
+            setPrecedureResult(`<messageFromSystem> you can not use another tag with <tellUserToWait> ! Instead use only the other tag to get the result of it, then use <tellUserToWait> and tell the user about the result you got . </messageFromSystem>`);
             return precedureResult;
         }
 

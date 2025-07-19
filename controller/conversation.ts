@@ -62,19 +62,21 @@ export const updateConversationById = async (id: string, updateData: object) => 
     }
 }
 
-export const getConversationSlice = async (conversationId: string | object, start: number, end: number) => {
+export const getConversationSlice = async (conversationId: string | object, start: number, end: number, orderedBy: 'asc' | 'desc' = 'asc' ) => {
     
     if (!conversationId) {
         return error('conversationId is required');
     }
-
+    
     try {
         const conversationPart = await Message.find({
             conversation: conversationId
         })
-        .sort({ createdAt: 1 })
+        .sort({ createdAt: orderedBy == "desc" ? -1 : 1})
         .skip(start)
         .limit(end - start +1);
+
+        orderedBy == 'desc' && conversationPart.reverse();
 
 
         return conversationPart?? `something went wrong while fetching messages from ${start} to ${end} . try another range`;
@@ -85,7 +87,7 @@ export const getConversationSlice = async (conversationId: string | object, star
     }
 }
 
-export const getConversationLenght = async (conversationId: string | object) => {
+export const getConversationLength = async (conversationId: string | object) => {
     try {
         const lenght = await Message.countDocuments({ $or: [
             { conversation: conversationId },

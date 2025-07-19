@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { MessageParams, MessageParamsForChatGPt, MessageParamsForDeepSeek, MessagePartsParams } from "../types.js";
-import { getConversationById, updateConversationById } from "./conversation.js";
+import { getConversationById, getConversationLength, updateConversationById } from "./conversation.js";
 import Message from "../models/message.js";
 import { primaryPrompt } from "../constants/prompts.js";
 import { messagePartsSchema } from "../models/message.js";
@@ -13,6 +13,8 @@ import ModelClient, { isUnexpected } from "@azure-rest/ai-inference";
 import { AzureKeyCredential } from "@azure/core-auth";
 import { defaultHistory } from "../constants/history.js";
 import OpenAI from "openai";
+import { getPureModelMessage, getPureUserMessage } from "../helper.js";
+import { Socket } from "socket.io";
 
 
 export const createDefaultMessages = async () => {
@@ -44,7 +46,7 @@ export const createDefaultMessages = async () => {
 }
 
 
-export const createMessage = async (conversationId: string, role: string, parts: MessagePartsParams[], type: string) => {
+export const createMessage = async (conversationId: string, role: string, parts: MessagePartsParams[], type: string, socket?: Socket,) => {
     
     if (!conversationId) {
         throw new Error("Conversation ID is required");
@@ -58,6 +60,11 @@ export const createMessage = async (conversationId: string, role: string, parts:
                 conversation: conversationId,
             }).save();
 
+        if (socket) {
+            const messageIndex = (await getConversationLength(conversationId)) as number - 1;
+            return socket.emit('receive-message', {newMessage, messageIndex})
+        }
+
         if (newMessage) {
             return newMessage;
         } else {
@@ -69,74 +76,63 @@ export const createMessage = async (conversationId: string, role: string, parts:
     }
 }
 
-export async function getTextAnswer(conversationId: string, model: string, history: MessageParams[], message: string, isWaiting: boolean) {
+export async function getTextAnswer(
+    conversationId: string, 
+    model: string, 
+    history: MessageParams[], 
+    message: string, 
+    isWaiting: boolean,
+    socket?: Socket
+) {
             
     try {
 
-        const conversation = await getConversationById(conversationId);
+        let temporaryMemory  = [...history] as MessageParams[];
 
-        if (!conversation || !conversation.user) {
-            return error('something went wrong while using "getConversationById()" !') 
+        if (history[history.length - 1]?.role === 'user' && isWaiting) {
+            temporaryMemory = [
+                ...history,
+                {role: "model", parts: [{text: '<tellUserToWait>loading...</tellUserToWait>'}]},
+                {role: "user", parts: [{text: ''}]}
+            ]
         }
 
-        let custimizedUserMessage = await custimizeUserMessage(conversation.user, conversationId, '', isWaiting); 
+        const userMessage = getPureUserMessage(message);
+        !isWaiting && message.includes("<messageFromUser>") && await createMessage(conversationId, "user", [{ text: userMessage }], "text", socket);
 
-        if (!message.includes('<precedureResult>')) {
-            custimizedUserMessage = await custimizeUserMessage(conversation.user, conversationId, message, isWaiting);
-        }
-        
-        
-        const historyWithLastMessage = [
-            ...history, 
-            {role: 'model', parts: [{text: "<tellUserToWait>loading...</tellUserToWait>"}]},
-        ] as MessageParams[];
+        const modelResult = await getAnswerFromGemini(model, temporaryMemory , message);
 
-        let response: string | undefined | null = '';
-
-        if (!isWaiting && !message.includes('<precedureResult>')) {
-            response = await getAnswerFromGemini(model, history, custimizedUserMessage);
-        } else if (isWaiting && !message.includes('<precedureResult>')) {
-            response = await getAnswerFromGemini(model, historyWithLastMessage, custimizedUserMessage);
-        } else if (message.includes('<precedureResult>')) {
-            response = await getAnswerFromGemini(model, historyWithLastMessage, message);
-        }
-        
-        if (!response) {
-            throw 'something went wrong while generating response !'
+        if (!modelResult) {
+            return error('something went wrong while getting answer from the model !');
         }
 
-        const res = await checkSymbols(response);
+        const checkResult = await checkSymbols(modelResult);
 
-        if (!res) {
-            return error('there is not res afterchecking Symbols !');
-        }
-
-        if (res?.includes('<tellUserToWait>')) {
+        if (checkResult.includes("<precedureResult>")) {
             
-            // const newMessage = await createMessage(conversationId, "user", [{ text: message }], "text");
-            return res;
-            
+            const memory = [
+                ...temporaryMemory ,
+                {
+                    role: 'model',
+                    parts: [{ text: modelResult }]
+                }
+            ] as MessageParams[]
+
+            return await getTextAnswer(conversationId, model, memory, checkResult, isWaiting);
         }
 
-        if (!res?.includes('<precedureResult>')) {
-
-            // const newMessage = await createMessage(conversationId, "user", [{ text: message }], "text");
-            // const message
-            const newResponse = await createMessage(conversationId, "model", [{ text: res }], "text");
-            return res;
-            
-        } else {
-            // console.log([custimizedUserMessage]);
-            
-            const historyWithLastMessage = [
-                ...history, 
-                {role: 'model', parts: [{text: "<tellUserToWait>loading...</tellUserToWait>"}]},
-                {role: 'user', parts: [{text: ''}]},
-                {role: 'model', parts: [{text: response}]}
-            ] as MessageParams[];
-
-            return getTextAnswer(conversationId, model, historyWithLastMessage, res, isWaiting);
+        if (checkResult.includes("<tellUserToWait>")) {
+            return checkResult;
         }
+
+        if (checkResult.includes("<messageToUser>")) {
+
+            const modelMessage = getPureModelMessage(checkResult);
+            const newResponse = await createMessage(conversationId, "model", [{ text: modelMessage }], "text");
+            return checkResult;
+        }
+
+        return undefined;
 
     } catch (err) {
         console.error("Error occurred while getting answer:", err);
@@ -144,6 +140,84 @@ export async function getTextAnswer(conversationId: string, model: string, histo
     }
 
 }
+
+// export async function getTextAnswer(conversationId: string, model: string, history: MessageParams[], message: string, isWaiting: boolean) {
+            
+//     try {
+
+//         const conversation = await getConversationById(conversationId);
+
+//         const userMessageStart = message.indexOf('<messageFromUser>') + '<messageFromUser>'.length;
+//         const userMessageEnd = message.indexOf('</messageFromUser>');
+//         const userMessage =  message.slice(userMessageStart, userMessageEnd).trim();
+
+//         if (!conversation || !conversation.user) {
+//             return error('something went wrong while using "getConversationById()" !') 
+//         }
+        
+//         const response = await getAnswerFromGemini(model, history, message);
+        
+//         if (!response) {
+//             throw 'something went wrong while generating response !'
+//         }
+
+//         const checkResult = await checkSymbols(response);
+
+//         if (!checkResult) {
+//             return error('there is not checkResult afterchecking Symbols !');
+//         }
+
+//         if (checkResult?.includes('<precedureResult>')) {
+
+//             const newMessage = checkResult?.includes('<messageFromUser>') ? 
+//                 await createMessage(conversationId, "user", [{ text: userMessage }], "text")
+//                 : await createMessage(conversationId, "user", [{ text: message }], "text");
+
+//             const newResponse = await createMessage(conversationId, "model", [{ text: response }], "text");
+
+//             const updatedHistory = await Message.find({ conversation: conversationId })
+//                 .limit(10)
+//                 .sort({ createdAt: -1 }) as MessageParams[];
+
+//             const orderedHistory = updatedHistory.reverse();
+
+//             return getTextAnswer(conversationId, model, orderedHistory, checkResult, isWaiting);
+            
+//         }
+        
+//         if (checkResult?.includes('<tellUserToWait>')) {
+            
+            
+//             const newMessage = await createMessage(conversationId, "user", [{ text: userMessage }], "text");
+//             const newResponse = await createMessage(conversationId, "model", [{ text: checkResult }], "text");
+
+//             return checkResult;
+            
+//         }
+
+//         if (checkResult?.includes('<messageToUser>')) {
+
+//             if (isWaiting) {
+
+//                 const newMessage = await createMessage(conversationId, "user", [{ text: "<system>user is in the waiting position</system>" }], "text");
+//                 const newResponse = await createMessage(conversationId, "model", [{ text: checkResult }], "text");
+            
+//             } else {
+
+//                 const newMessage = await createMessage(conversationId, "user", [{ text: userMessage }], "text");
+//                 const newResponse = await createMessage(conversationId, "model", [{ text: checkResult }], "text");
+
+//             }
+//             return checkResult;
+            
+//         }
+
+//     } catch (err) {
+//         console.error("Error occurred while getting answer:", err);
+//         return {err}
+//     }
+
+// }
 
 export const updatePrimaryPrompt = async (prompt: string) => {
 
@@ -288,6 +362,22 @@ export const getMessagesByContent = async (conversationId: string | object, sear
 
         return conversationPart?? `something went wrong while fetching messages that have content like "${searchTerm}" . try another searchTerm .`;
 
+    } catch (err) {
+        return error(err);
+    }
+}
+
+export const getLastMessage = async (conversationId: string) => {
+
+    if (!conversationId) {
+        return error('conversationId is required');
+    }
+
+    try {
+        const lastMessage = await Message.findOne({conversation: conversationId})
+        .sort({ createdAt: -1 });
+
+        return lastMessage;
     } catch (err) {
         return error(err);
     }

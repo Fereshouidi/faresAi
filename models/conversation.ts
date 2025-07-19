@@ -6,6 +6,7 @@ import { primaryPrompt } from "../constants/prompts.js";
 const conversationSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
+        required: true,
         ref: "User",
     },
     title: {

@@ -21,6 +21,25 @@ export const getUserById = async (id: string) => {
     }
 }
 
+export const getUserBySignIn = async (email: string, password: string) => {
+
+    console.log({email, password});
+    
+
+    try {
+        if (!email || !password) {
+            return {error: 'email and password are required !'}
+        }
+
+        const user = await User.findOne({email, password});
+
+        return user;
+
+    } catch (err) {
+        return err;
+    }
+}
+
 export const getUserByConversation = async (conversationId: string) => {
     if (!conversationId) {
         return error('conversationId is required');
