@@ -27,6 +27,12 @@ export const functionalSymbols = `
     - إعلام المستخدم بالإجراءات:
     <tellUserToWait>نص الإشعار</tellUserToWait>
 
+    - تعديل محادثة:
+    <updateConversationById>
+        <id>conversationId</id>
+        <data>object of updated conversation data (not json) ( it must start with "{" and end with "}" without spaces or new lines , be carefull) </data>
+    </updateConversationById>
+
 `;
 
 

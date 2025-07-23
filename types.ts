@@ -49,3 +49,13 @@ export interface NoteContentParams {
     title: string;
     text: string;
 }
+
+export interface ConversationParams {
+    _id: object | string;
+    user: UserParams | object | string;
+    title?: string;
+    model?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+}
+

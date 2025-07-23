@@ -1,6 +1,6 @@
-import { createNote, getNoteByUserId, updateNoteById } from "./socket/aiNote.js";
-import { getConversationSlice, updateConversationById } from "./socket/conversation.js";
-import { createMessage, getMessagesByContent } from "./socket/message.js";
+import { createNote, getNoteByUserId, updateNoteById } from "../../controller/socket/aiNote.js";
+import { getConversationSlice, updateConversationById } from "../../controller/socket/conversation.js";
+import { createMessage, getMessagesByContent } from "../../controller/socket/message.js";
 import { Socket } from "socket.io";
 
 let result = '<Restult></Result>';
@@ -16,36 +16,7 @@ const setResult = (res: string) => {
     result = result.slice(0, end) + res + result.slice(end);
 }
 
-const hasExtraTagInsideMessageToUser = (text: string, openTag: string, closeTag: string) => {
-
-    const openIndex = text.indexOf(openTag);
-    const closeIndex = text.indexOf(closeTag);
-
-    const before = text.slice(0, openIndex);
-    const after = text.slice(closeIndex + closeTag.length);
-
-    return before.includes("<") || after.includes("<");
-
-}
-
-const hasPlainTextOutsideMessageToUser = (text: string, openTag: string, closeTag: string): boolean => {
-
-  const openIndex = text.indexOf(openTag);
-  const closeIndex = text.indexOf(closeTag);
-
-  if (openIndex === -1 || closeIndex === -1) {
-    return true;
-  }
-
-  const before = text.slice(0, openIndex).trim();
-  const after = text.slice(closeIndex + closeTag.length).trim();
-
-  return (before.replace(/<[^>]*>/g, "").trim().length > 0) ||
-         (after.replace(/<[^>]*>/g, "").trim().length > 0);
-}
-
-
-export async function checkSymbols (response: string, socket: Socket) { console.log({response});
+export async function checkSymbols (response: string) { console.log({response});
 
     precedureResult = '<precedureResult></precedureResult>';
     result = '<Restult></Result>';

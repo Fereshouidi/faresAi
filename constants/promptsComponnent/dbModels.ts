@@ -8,7 +8,7 @@ export const dbModels = `
 
     Conversation: Tracks chat sessions
 
-    user (ref: User), title, model (default: gemini-2.5-flash)
+    user (ref: User), title, model (default: "gemini-2.5-flash")
 
     Timestamps
 

@@ -1,5 +1,5 @@
 import { MessageParams } from "../types.js";
-import { primaryPrompt } from "./prompts.js";
+import { primaryPrompt, primaryPromptForProcedureAgent } from "./prompts.js";
 
 export const defaultHistory = [
     {
@@ -8,6 +8,21 @@ export const defaultHistory = [
     },
     {
         role: "model",
-        parts: [{ text: "Great to meet you. What would you like to know?" }],
+        parts: [{ text: "Great , let's get started!" }],
     },
 ] as MessageParams[];
+
+export const primaryChatForProcedureAgent = [
+    {
+        role: "user",
+        parts: [
+            { text: primaryPromptForProcedureAgent }
+        ]
+    },
+    {
+        role: "model",
+        parts: [
+            { text: "great, let's get started ." }
+        ]
+    }   
+]

@@ -1,5 +1,5 @@
-import AINote from "../models/aiNote.js";
-import { AiNoteParams, NoteContentParams } from "../types.js";
+import AINote from "../../models/aiNote.js";
+import { AiNoteParams, NoteContentParams } from "../../types.js";
 
 
 export const createNote = async (userId: string | object, content: string) => {

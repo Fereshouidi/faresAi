@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoConn from './connection.js';
 // import cors from 'cors';
-import { createDefaultMessages, getTextAnswer, updatePrimaryPrompt } from './controller/message.js';
+import { createDefaultMessages, updatePrimaryPrompt } from './controller/endpoint/message.js';
 import { MessageParams } from './types.js';
 import MessageRoute from './routes/messages.js'; 
 import ConversationRoute from './routes/conversation.js';
@@ -11,6 +11,7 @@ import dotenv from "dotenv";
 import { Server } from 'socket.io';
 // import io from './socket.io.js';
 import registerSocketHandlers from './sockets/server.js';
+import { custimizeUserMessage, parseCustomizedMessage } from './constants/promptsComponnent/userMessage.js';
 
 dotenv.config();
 const io = new Server(3000)
@@ -27,6 +28,11 @@ app.use('/api', UserRoute);
 const port = process.env.PORT;
 
 await mongoConn;
+
+// console.log({primaryPrompt});
+
+
+
 // await createDefaultMessages();
 
 // console.log(await updatePrimaryPrompt(primaryPrompt));

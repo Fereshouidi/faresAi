@@ -1,20 +1,21 @@
 import { GoogleGenAI } from "@google/genai";
-import { MessageParams, MessageParamsForChatGPt, MessageParamsForDeepSeek, MessagePartsParams } from "../types.js";
+import { MessageParams, MessageParamsForChatGPt, MessageParamsForDeepSeek, MessagePartsParams } from "../../types.js";
 import { getConversationById, getConversationLength, updateConversationById } from "./conversation.js";
-import Message from "../models/message.js";
-import { primaryPrompt } from "../constants/prompts.js";
-import { messagePartsSchema } from "../models/message.js";
+import Message from "../../models/message.js";
+import { primaryPrompt } from "../../constants/prompts.js";
+import { messagePartsSchema } from "../../models/message.js";
 import { json } from "stream/consumers";
-import { checkSymbols } from "./functionalSymbols.js";
-import { custimizeUserMessage } from "../constants/promptsComponnent/userMessage.js";
+import { checkSymbols } from "../functionalSymbols.js";
+import { custimizeUserMessage } from "../../constants/promptsComponnent/userMessage.js";
 import { getUserByConversation, getUserById } from "./user.js";
 import { error } from "console";
 import ModelClient, { isUnexpected } from "@azure-rest/ai-inference";
 import { AzureKeyCredential } from "@azure/core-auth";
-import { defaultHistory } from "../constants/history.js";
+import { defaultHistory } from "../../constants/history.js";
 import OpenAI from "openai";
-import { getPureModelMessage, getPureUserMessage } from "../helper.js";
+import { getPureModelMessage, getPureUserMessage } from "../../helper.js";
 import { Socket } from "socket.io";
+import { Types } from "mongoose";
 
 
 export const createDefaultMessages = async () => {
@@ -76,70 +77,66 @@ export const createMessage = async (conversationId: string, role: string, parts:
     }
 }
 
-export async function getTextAnswer(
-    conversationId: string, 
-    model: string, 
-    history: MessageParams[], 
-    message: string, 
-    isWaiting: boolean,
-    socket?: Socket
-) {
+// export async function getTextAnswer(
+// conversationId: string, user: Types.ObjectId, model: string, history: MessageParams[], message: string, isWaiting: boolean, socket?: Socket) {
             
-    try {
+//     try {
 
-        let temporaryMemory  = [...history] as MessageParams[];
+//         let temporaryMemory  = [...history] as MessageParams[];
 
-        if (history[history.length - 1]?.role === 'user' && isWaiting) {
-            temporaryMemory = [
-                ...history,
-                {role: "model", parts: [{text: '<tellUserToWait>loading...</tellUserToWait>'}]},
-                {role: "user", parts: [{text: ''}]}
-            ]
-        }
+//         if (history[history.length - 1]?.role === 'user' && isWaiting) {
+//             temporaryMemory = [
+//                 ...history,
+//                 {role: "model", parts: [{text: '<tellUserToWait>loading...</tellUserToWait>'}]},
+//                 {role: "user", parts: [{text: ''}]}
+//             ]
+//         }
 
-        const userMessage = getPureUserMessage(message);
-        !isWaiting && message.includes("<messageFromUser>") && await createMessage(conversationId, "user", [{ text: userMessage }], "text", socket);
+//         const userMessage = getPureUserMessage(message);
+//         !isWaiting && message.includes("<messageFromUser>") && await createMessage(conversationId, "user", [{ text: userMessage }], "text", socket);
 
-        const modelResult = await getAnswerFromGemini(model, temporaryMemory , message);
+//         const modelResult = await getAnswerFromGemini(model, temporaryMemory , message);
 
-        if (!modelResult) {
-            return error('something went wrong while getting answer from the model !');
-        }
+//         if (!modelResult) {
+//             return error('something went wrong while getting answer from the model !');
+//         }
 
-        const checkResult = await checkSymbols(modelResult);
+//         const checkResult = await checkSymbols(modelResult);
 
-        if (checkResult.includes("<precedureResult>")) {
+//         if (checkResult.includes("<precedureResult>")) {
             
-            const memory = [
-                ...temporaryMemory ,
-                {
-                    role: 'model',
-                    parts: [{ text: modelResult }]
-                }
-            ] as MessageParams[]
+//             const memory = [
+//                 ...temporaryMemory ,
+//                 {
+//                     role: 'model',
+//                     parts: [{ text: modelResult }]
+//                 }
+//             ] as MessageParams[]
 
-            return await getTextAnswer(conversationId, model, memory, checkResult, isWaiting);
-        }
+//             return await getTextAnswer(conversationId, model, memory, checkResult, isWaiting);
+//         }
 
-        if (checkResult.includes("<tellUserToWait>")) {
-            return checkResult;
-        }
+//         if (checkResult.includes("<tellUserToWait>")) {
+//             return checkResult;
+//         }
 
-        if (checkResult.includes("<messageToUser>")) {
+//         if (checkResult.includes("<messageToUser>")) {
 
-            const modelMessage = getPureModelMessage(checkResult);
-            const newResponse = await createMessage(conversationId, "model", [{ text: modelMessage }], "text");
-            return checkResult;
-        }
+//             const modelMessage = getPureModelMessage(checkResult);
+//             const newResponse = await createMessage(conversationId, "model", [{ text: modelMessage }], "text");
+//             return checkResult;
+//         }
 
-        return undefined;
+//         return undefined;
 
-    } catch (err) {
-        console.error("Error occurred while getting answer:", err);
-        return {err}
-    }
+//     } catch (err) {
+//         console.error("Error occurred while getting answer:", err);
+//         return {err}
+//     }
 
-}
+// }
+
+"f"
 
 // export async function getTextAnswer(conversationId: string, model: string, history: MessageParams[], message: string, isWaiting: boolean) {
             

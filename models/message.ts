@@ -53,14 +53,12 @@ const messageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Conversation",
     },
-    createdAt: {
-        type: Date,
-        default: Date.now,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
     },
-    updatedAt: {
-        type: Date,
-        default: Date.now,
-    },
+}, {
+  timestamps: true
 });
 
 const Message = mongoose.model("Message", messageSchema);

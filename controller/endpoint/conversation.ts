@@ -1,7 +1,7 @@
 import { error } from "console";
-import Conversation from "../models/conversation.js";
-import Message from "../models/message.js";
-import { primaryPrompt } from "../constants/prompts.js";
+import Conversation from "../../models/conversation.js";
+import Message from "../../models/message.js";
+import { primaryPrompt } from "../../constants/prompts.js";
 import { createDefaultMessages } from "./message.js";
 
 export const getConversationById = async (id: string) => {

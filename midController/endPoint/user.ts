@@ -1,7 +1,7 @@
 import express from "express";
 import { UserParams } from "../../types.js";
 import User from "../../models/user.js";
-import { createUser } from "../../controller/user.js";
+import { createUser } from "../../controller/endpoint/user.js";
 
 
 export const createUser_ =  async (

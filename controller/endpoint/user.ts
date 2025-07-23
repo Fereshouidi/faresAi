@@ -1,7 +1,7 @@
 import { error } from "console";
-import User from "../models/user.js";
-import { UserParams } from "../types.js";
-import Conversation from "../models/conversation.js";
+import User from "../../models/user.js";
+import { UserParams } from "../../types.js";
+import Conversation from "../../models/conversation.js";
 import { createNote } from "./aiNote.js";
 
 export const getUserById = async (id: string) => {

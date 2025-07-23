@@ -1,5 +1,5 @@
 import express from "express";
-import { createConversation, getConversationSlice } from "../controller/conversation.js";
+import { createConversation, getConversationSlice } from "../controller/endpoint/conversation.js";
 import Conversation from "../models/conversation.js";
 import { createConversation_, getConversationsByUserId_, getConversationSlice_ } from "../midController/endPoint/conversation.js";
 

@@ -1,11 +1,14 @@
 import { Server } from 'socket.io';
-import messagesSocket from './messages.js';
+import messageSocket from './message.js';
+import conversationSocket from './conversation.js';
 
 export default function registerSocketHandlers(io: Server) {
   io.on('connection', (socket) => {
     console.log('User connected:', socket.id);
 
-    messagesSocket(socket, io);
+    messageSocket(socket, io);
+
+    conversationSocket(socket, io);
 
     socket.on('disconnect', () => {
       console.log('User disconnected:', socket.id);
