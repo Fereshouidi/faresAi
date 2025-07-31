@@ -2,7 +2,6 @@ import { error } from "console";
 import Conversation from "../../models/conversation.js";
 import Message from "../../models/message.js";
 import { primaryPrompt } from "../../constants/prompts.js";
-import { createDefaultMessages } from "./message.js";
 
 export const getConversationById = async (id: string) => {
     if (!id) {
@@ -89,11 +88,7 @@ export const getConversationSlice = async (conversationId: string | object, star
 
 export const getConversationLength = async (conversationId: string | object) => {
     try {
-        const lenght = await Message.countDocuments({ $or: [
-            { conversation: conversationId },
-            // { type: "primaryPrompt" },
-            // { type: "primaryResponse" }
-        ] })
+        const lenght = await Message.countDocuments({ conversation: conversationId })
 
         return lenght;
 

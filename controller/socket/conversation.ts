@@ -92,8 +92,6 @@ export const getConversationLength = async (conversationId: string | object) => 
     try {
         const lenght = await Message.countDocuments({ $or: [
             { conversation: conversationId },
-            // { type: "primaryPrompt" },
-            // { type: "primaryResponse" }
         ] })
 
         return lenght;

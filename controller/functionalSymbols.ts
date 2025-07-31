@@ -55,23 +55,23 @@ export async function checkSymbols (response: string, socket: Socket) { console.
         return precedureResult;
     }
         
-    if (response.includes('<messageToUser>')) {
+    // if (response.includes('<messageToUser>')) {
 
-        const start = response.indexOf('<messageToUser>') + '<messageToUser>'.length;
-        const end = response.indexOf('</messageToUser>');
-        const content = response.slice(start, end).trim();
+    //     const start = response.indexOf('<messageToUser>') + '<messageToUser>'.length;
+    //     const end = response.indexOf('</messageToUser>');
+    //     const content = response.slice(start, end).trim();
 
-        setResult('<messageToUser>' + content + '</messageToUser>');        
-    }
+    //     setResult('<messageToUser>' + content + '</messageToUser>');        
+    // }
 
-    if (response.includes('<tellUserToWait>')) {
+    // if (response.includes('<tellUserToWait>')) {
 
-        const start = response.indexOf('<tellUserToWait>') + '<tellUserToWait>'.length;
-        const end = response.indexOf('</tellUserToWait>');
-        const content = response.slice(start, end).trim();
+    //     const start = response.indexOf('<tellUserToWait>') + '<tellUserToWait>'.length;
+    //     const end = response.indexOf('</tellUserToWait>');
+    //     const content = response.slice(start, end).trim();
         
-        setResult('<tellUserToWait>' + content + '</tellUserToWait>');
-    }
+    //     setResult('<tellUserToWait>' + content + '</tellUserToWait>');
+    // }
 
     if (response.includes('<getNoteByUser>')) {
         const start = response.indexOf('<messageToUser>') + '<messageToUser>'.length;
@@ -169,11 +169,15 @@ export async function checkSymbols (response: string, socket: Socket) { console.
         const contentStart = symboles.indexOf('<content>') + '<content>'.length;
         const contentEnd = symboles.indexOf('</content>');
 
+        const pageStart = symboles.indexOf('<page>') + '<page>'.length;
+        const pageEnd = symboles.indexOf('</page>');
+
         const conversationId = symboles.slice(conversationIdStart, conversationIdEnd) as string;
         const content = symboles.slice(contentStart, contentEnd);
+        const page = Number(symboles.slice(pageStart, pageEnd));
 
-        const res = await getMessagesByContent(conversationId, content);
-        setPrecedureResult('<getMessagesByContent>' + res + '<getMessagesByContent/>');
+        const res = await getMessagesByContent(conversationId, content, page);
+        setPrecedureResult('<getMessagesByContent>' + JSON.stringify(res) + '<getMessagesByContent/>');
 
     }
 

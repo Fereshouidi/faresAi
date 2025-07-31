@@ -44,6 +44,9 @@ const messageSchema = new mongoose.Schema({
         _id: false,
         required: true,
     },
+    index: {
+        type: Number
+    },
     type: {
         type: String,
         enum: ["primaryPrompt", "primaryResponse", "text", "image", "audio", "video", "file", "toolCall", "toolResult", "toolError", "toolResponse", "toolResponseError"],

@@ -24,6 +24,10 @@ const userSchema = new mongoose.Schema({
         default: () => randomBytes(16).toString('hex'),
         unique: true,
     },
+    notes: {
+        type: String,
+        default: "there is no notes yet !"
+    }
 
 }, {
   timestamps: true

@@ -1,13 +1,13 @@
 import { createMessage, getLastMessage, getTextAnswer } from "../../controller/socket/message.js";
 import Message from "../../models/message.js";
 import { createConversation, getConversationById, getConversationLength } from "../../controller/socket/conversation.js";
-// import { defaultHistory } from "../../constants/history.js";
-import { ConversationParams, MessageParams } from "../../types.js";
-// import { primaryPrompt } from "../../constants/prompts.js";
+import { ConversationParams, MessageParams, UserParams } from "../../types.js";
 import { custimizeUserMessage } from "../../constants/promptsComponnent/userMessage.js";
-// import { ObjectId } from "mongoose";
 import { Socket } from "socket.io";
-import { createConversationTittle } from "../../helper.js";
+import { createConversationTittle } from "../../utils/helper.js";
+import { maxMessageToGet } from "../../constants/maxMessage.js";
+import { summarizeConversation_updateNotes } from "../../agents/summeryAgent/agent.js";
+import User from "../../models/user.js";
 
 export const getAnswer_ = async (
     socket: Socket,
@@ -23,6 +23,8 @@ export const getAnswer_ = async (
     
     try {
 
+      const user = await User.findOne({_id: userId}) as UserParams;
+
       let conversation =  null as unknown as ConversationParams;
 
       if (conversationId) {
@@ -30,29 +32,36 @@ export const getAnswer_ = async (
         conversation = await getConversationById(conversationId) as ConversationParams;
 
       } else {
-        const conversationTittle = await createConversationTittle(message) as unknown as string;
-        console.log({conversationTittle});
-        
+        const conversationTittle = await createConversationTittle(message) as unknown as string;        
         conversation = await createConversation(userId, conversationTittle) as ConversationParams;
         socket.emit('add-conversation', {newConversation: conversation});
       }
 
-      console.log({conversation});
-
-      if (!conversation) {
+      if (!conversation || conversation.summary === 'undefined' !) {
         console.log('Conversation not found or could not be created.');
         return socket.emit('receive-message', { error: 'Conversation not found or could not be created.' });
       }
 
       const history = await Message.find({ conversation: conversation._id })
-        .limit(10)
+        .limit(maxMessageToGet)
         .sort({ createdAt: -1 }) as MessageParams[];
+
+      const conversationLength = (await getConversationLength(conversation._id)) as number - 1;
+
+      if ( conversationLength == maxMessageToGet || (conversationLength % maxMessageToGet) == 0) {
+
+        socket.emit('receive-message', { messageToWait: 'summarazing' });
+        const summarizedConversation = (await summarizeConversation_updateNotes(conversation, history, user)).summary;
+        conversation.summary = summarizedConversation || conversation.summary;
+        
+      }
 
       const orderedHistory = history.reverse();
 
       const customizedUserMessage = await custimizeUserMessage(
-        conversation.user,
-        String(conversation._id),
+        conversation,
+        user,
+        conversation.summary?? 'there is no summary !',
         message,
         isWaiting
       );
@@ -67,8 +76,7 @@ export const getAnswer_ = async (
       ) as MessageParams;
 
       const answer = await getTextAnswer(
-        String(conversation._id),
-        String(conversation.user),
+        conversation,
         model,
         orderedHistory,
         customizedUserMessage,
@@ -76,8 +84,8 @@ export const getAnswer_ = async (
         socket
       );
 
-      const lastMessage = await getLastMessage(String(conversation._id));
-      const messageIndex = (await getConversationLength(conversation._id)) as number - 1;
+      // const lastMessage = await getLastMessage(String(conversation._id));
+      // const messageIndex = (await getConversationLength(conversation._id)) as number - 1;
 
     //   socket.emit('receive-message', { answer: lastMessage, messageIndex });
 

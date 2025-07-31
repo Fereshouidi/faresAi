@@ -47,11 +47,11 @@ ${informationsAboutFares}
 // ${precudureRules}
 
 
-export const primaryPromptForProcedureAgent = `
+// export const primaryPromptForProcedureAgent = `
 
-انت الان تعمل داخل تطبيق ذكاء اصطناعي و مهمتك هي القيام بالاجراءات التي تستلمها من زملاءك .
-و لاتمام اي اجراء استخدم الرموز الوظيفية التالية :
+// انت الان تعمل داخل تطبيق ذكاء اصطناعي و مهمتك هي القيام بالاجراءات التي تستلمها من زملاءك .
+// و لاتمام اي اجراء استخدم الرموز الوظيفية التالية :
 
-${functionalSymbols}
+// ${functionalSymbols}
 
-`;
+// `;

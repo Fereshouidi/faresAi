@@ -1,5 +1,4 @@
 import { GoogleGenAI } from "@google/genai";
-import { getAnswerFromGemini } from "./controller/socket/message.js";
 
 export const getPureModelMessage = (message: string) => {
 
@@ -22,7 +21,7 @@ export const getPureUserMessage = (message: string) => {
 }
 
 export const isOnlyTellUserToWaitTag = (text: string) => {
-  const regex = /^<tellUserToWait>[\s\S]*<\/tellUserToWait>$/;
+  const regex = /^<tellUserToWait>[\s\S]*<\/tellUserToWait>\s*$/;
   return regex.test(text);
 };
 

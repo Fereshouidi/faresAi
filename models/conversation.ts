@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
-import { title } from "process";
-import { MessageParams } from "../types.js";
-import { primaryPrompt } from "../constants/prompts.js";
+import { maxMessageToGet } from "../constants/maxMessage.js";
 
 const conversationSchema = new mongoose.Schema({
     user: {
@@ -13,10 +11,9 @@ const conversationSchema = new mongoose.Schema({
         type: String,
         default: "New Conversation",
     },
-    model: {
+    summary: {
         type: String,
-        default: "gemini-2.5-flash",
-        required: true,
+        default: `this conversation is shorter than ${maxMessageToGet} message .`,
     },
     createdAt: {
         type: Date,

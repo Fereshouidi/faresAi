@@ -3,6 +3,7 @@ import User from "../../models/user.js";
 import { UserParams } from "../../types.js";
 import Conversation from "../../models/conversation.js";
 import { createNote } from "./aiNote.js";
+import { ObjectId } from "mongoose";
 
 export const getUserById = async (id: string) => {
     if (!id) {
@@ -95,6 +96,31 @@ export const updateUser = async (updatedData: UserParams) => {
     try {
         const updatedUser = await User.findByIdAndUpdate(updatedData._id, updatedData, { new: true });
         return updatedUser;
+    } catch (err) {
+        throw err;
+    }
+
+}
+
+export const updateNotes = async (userId: string | ObjectId , updatedNotes: String) => {
+
+    if (!updatedNotes) {
+        return error('updatedNotes is required');
+    }
+
+    try {
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            updatedNotes, 
+            { new: true }
+        );
+
+        return {
+            message: "notes has been updated successfully",
+            updatedUser
+        };
+
     } catch (err) {
         throw err;
     }

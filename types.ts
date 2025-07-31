@@ -1,7 +1,11 @@
+import { ObjectId } from "mongoose";
 
 export interface MessageParams {
     role: "user" | "model";
+    index: number
     parts: MessagePartsParams[];
+    conversation?: ConversationParams | string | ObjectId
+    user?: UserParams | string | ObjectId
 }
 
 export interface MessageParamsForChatGPt {
@@ -35,6 +39,7 @@ export interface UserParams {
     password: string;
     createdAt?: Date;
     updatedAt?: Date;
+    notes?: string
 }
 
 export interface AiNoteParams {
@@ -54,7 +59,8 @@ export interface ConversationParams {
     _id: object | string;
     user: UserParams | object | string;
     title?: string;
-    model?: string;
+    summary?: string;
+    length?: number;
     createdAt?: Date;
     updatedAt?: Date;
 }
