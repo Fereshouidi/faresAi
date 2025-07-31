@@ -32,11 +32,13 @@ registerSocketHandlers(io);
 console.log({primaryPrompt: primaryPrompt.length});
 
 app.get('/', (req, res) => {
-  res.send(`<div>Server is running at http://localhost:${port}</div>`)
-})
+    res.send('Server is running!');
+});
 
-export const handler = serverless(app);
+const handler = serverless(app);
 
-// app.listen(port, () => {
-//   console.log(`Server is running at http://localhost:${port}`);
-// });
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
+
+export default handler;
