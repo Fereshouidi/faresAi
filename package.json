@@ -2,6 +2,7 @@
   "scripts": {
     "start": "node --loader ts-node/esm server.ts"
   },
+  "build": "tsc",
   "dependencies": {
     "@azure-rest/ai-inference": "latest",
     "@azure/core-auth": "latest",
