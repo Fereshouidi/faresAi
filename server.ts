@@ -37,8 +37,8 @@ app.get('/', (req, res) => {
 
 const handler = serverless(app);
 
-// app.listen(port, () => {
-//   console.log(`Server is running at http://localhost:${port}`);
-// });
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
+});
 
 export default handler;
