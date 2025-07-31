@@ -12,7 +12,7 @@ import { Express } from 'express-serve-static-core';
 import serverless from 'serverless-http';
 
 dotenv.config();
-const io = new Server(3000)
+const io = new Server(Number(process.env.PORT))
 
 const app = express();
 app.use(express.json());
@@ -24,7 +24,7 @@ app.use('/api', UserRoute);
 
 const port = process.env.PORT;
 
-await mongoConn;
+// await mongoConn;
 
 
 registerSocketHandlers(io);
