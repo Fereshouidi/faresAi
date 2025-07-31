@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "node server.js"
+    "start": "node --loader ts-node/esm server.ts"
   },
   "dependencies": {
     "@azure-rest/ai-inference": "latest",
