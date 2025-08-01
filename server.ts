@@ -31,6 +31,8 @@ const io = new Server(server);
 
 app.get("/", (req, res) => {
   res.send("Server is working!");
+  console.log("Server is working!");
+  
 });
 
 app.use('/api', MessageRoute);
