@@ -16,7 +16,7 @@ console.log(1);
 
 
 dotenv.config();
-const io = new Server(Number(process.env.PORT));
+// const io = new Server(Number(process.env.PORT));
 
 console.log(2);
 
@@ -44,7 +44,7 @@ console.log(process.env.PORT);
 await mongoConn;
 
 
-registerSocketHandlers(io);
+// registerSocketHandlers(io);
 
 console.log({primaryPrompt: primaryPrompt.length});
 
