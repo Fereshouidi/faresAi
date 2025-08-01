@@ -77,6 +77,9 @@ export const getUserByToken_ = async (
 ) => {
 
     const { token } = req.query;
+
+    console.log({token});
+    
     
     try {
         if (!token) {
