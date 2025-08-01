@@ -11,8 +11,13 @@ import registerSocketHandlers from './sockets/server.js';
 import { Express } from 'express-serve-static-core';
 import serverless from 'serverless-http';
 
+console.log(1);
+
 dotenv.config();
-const io = new Server(Number(process.env.PORT))
+const io = new Server(Number(process.env.PORT));
+
+console.log(2);
+
 
 const app = express();
 app.use(express.json());
@@ -21,8 +26,13 @@ app.use('/api', MessageRoute);
 app.use('/api', ConversationRoute);
 app.use('/api', UserRoute);
 
+console.log(3);
+
 
 const port = process.env.PORT;
+
+console.log(process.env.PORT);
+
 
 // await mongoConn;
 
@@ -35,10 +45,17 @@ app.get("/", (req, res) => {
   res.send("Server is working!");
 });
 
+console.log(4);
+
+
 const handler = serverless(app);
+
+console.log(5);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+console.log(6);
 
 export default handler;
