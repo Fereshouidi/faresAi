@@ -13,21 +13,24 @@ import { Express } from 'express-serve-static-core';
 import serverless from 'serverless-http';
 import http from 'http';
 
-console.log(1);
-
-
 dotenv.config();
-console.log(2);
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+  origin: "*",
+  credentials: true,
+}));
 
 const server = http.createServer(app);
 
-const io = new Server(server);
-
-
+const io = new Server(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 app.get("/", (req, res) => {
   res.send("Server is working!");
@@ -39,32 +42,19 @@ app.use('/routes', MessageRoute);
 app.use('/routes', ConversationRoute);
 app.use('/routes', UserRoute);
 
-console.log(3);
-
-
 const port = process.env.PORT;
-
-console.log(process.env.PORT);
-
 
 await mongoConn;
 
 
-// registerSocketHandlers(io);
+registerSocketHandlers(io);
 
 console.log({primaryPrompt: primaryPrompt.length});
 
-console.log(4);
-
-
 // const handler = serverless(app);
 
-console.log(5);
-
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
-
-console.log(6);
 
 // export default handler;
