@@ -42,8 +42,12 @@ app.get("/", (req, res) => {
 });
 
 app.get("/getAllUsers", async (req, res) => {
-  const users = await User.find();
-  res.send(JSON.stringify(users, null, 2)?? JSON.stringify(conn, null, 2))
+  try {
+    const users = await User.find();
+    res.send(JSON.stringify(users, null, 2)?? JSON.stringify(conn, null, 2))
+  } catch (err) {
+    res.send(err)
+  }
   
 });
 
