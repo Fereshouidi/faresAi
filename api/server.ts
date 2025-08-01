@@ -1,13 +1,13 @@
 import express from 'express';
 import mongoConn from './connection.js';
-import { MessageParams } from './types.js';
-import MessageRoute from './routes/messages.js'; 
-import ConversationRoute from './routes/conversation.js';
-import UserRoute from './routes/user.js';
-import { primaryPrompt } from './constants/prompts.js';
+import { MessageParams } from '../types.js';
+import MessageRoute from '../routes/messages.js'; 
+import ConversationRoute from '../routes/conversation.js';
+import UserRoute from '../routes/user.js';
+import { primaryPrompt } from '../constants/prompts.js';
 import dotenv from "dotenv";
 import { Server } from 'socket.io';
-import registerSocketHandlers from './sockets/server.js';
+import registerSocketHandlers from '../sockets/server.js';
 import { Express } from 'express-serve-static-core';
 import serverless from 'serverless-http';
 
