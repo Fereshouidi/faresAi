@@ -13,6 +13,7 @@ import serverless from 'serverless-http';
 
 console.log(1);
 
+
 dotenv.config();
 const io = new Server(Number(process.env.PORT));
 
@@ -22,6 +23,10 @@ console.log(2);
 const app = express();
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res.send("Server is working!");
+});
+
 app.use('/api', MessageRoute);
 app.use('/api', ConversationRoute);
 app.use('/api', UserRoute);
@@ -29,7 +34,7 @@ app.use('/api', UserRoute);
 console.log(3);
 
 
-const port = process.env.PORT;
+const port = 3002 || process.env.PORT;
 
 console.log(process.env.PORT);
 
@@ -40,10 +45,6 @@ console.log(process.env.PORT);
 registerSocketHandlers(io);
 
 console.log({primaryPrompt: primaryPrompt.length});
-
-app.get("/", (req, res) => {
-  res.send("Server is working!");
-});
 
 console.log(4);
 
