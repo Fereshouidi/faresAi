@@ -11,7 +11,7 @@ import User from "../../models/user.js";
 export const createConversationTittle = async (firstMessage: string) => {
 
     const ai = new GoogleGenAI({
-        apiKey: process.env.GEMINI_KEY,
+        apiKey: "AIzaSyDjLld0ynrVEvbIFK3inQCp4tR3UEScaxs",
     });
     
 
@@ -83,7 +83,7 @@ export const summarizeConversation_updateNotes = async (conversation: Conversati
     }
 
     const ai = new GoogleGenAI({
-        apiKey: process.env.GEMINI_KEY,
+        apiKey: "AIzaSyDjLld0ynrVEvbIFK3inQCp4tR3UEScaxs",
     });
     
 

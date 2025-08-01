@@ -55,7 +55,7 @@ app.use('/routes', MessageRoute);
 app.use('/routes', ConversationRoute);
 app.use('/routes', UserRoute);
 
-const port = process.env.PORT;
+const port = process.env.PORT || 3002;
 
 
 registerSocketHandlers(io);
