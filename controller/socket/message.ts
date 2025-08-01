@@ -177,7 +177,7 @@ export const updatePrimaryPrompt = async (prompt: string) => {
 export const getAnswerFromGemini = async (model: string, history: MessageParams[], customizedUserMessage: string) => {
 
     const ai = new GoogleGenAI({
-        apiKey: "process.env.GEMINI_KE"Y,
+        apiKey: "AIzaSyDjLld0ynrVEvbIFK3inQCp4tR3UEScaxs",
     });
     
     const customizedHistory = history.map(msg => ({
