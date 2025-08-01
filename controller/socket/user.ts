@@ -47,7 +47,7 @@ export const getUserByConversation = async (conversationId: string) => {
     }
 
     try {
-        const conversation = await Conversation.findOne({_id: conversationId});
+        const conversation = await Conversation.findOne({_id: conversationId}).lean();
         const user = await User.findOne({_id: conversation?.user})
         
         if (user) {

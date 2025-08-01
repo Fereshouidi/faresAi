@@ -140,7 +140,7 @@ export const summarizeConversation_updateNotes = async (conversation: Conversati
         {_id: conversation._id},
         {summary},
         {new: true}
-    )
+    ).lean()
 
     const updatedUser = notes && await User.findOneAndUpdate(
         {_id: user?._id},

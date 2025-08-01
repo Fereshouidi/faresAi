@@ -9,7 +9,7 @@ export const getConversationById = async (id: string) => {
     }
 
     try {
-        const conversation = await Conversation.findOne({_id: id});
+        const conversation = await Conversation.findOne({_id: id}).lean();
         if (conversation) {
             return conversation
         } else {
@@ -50,7 +50,7 @@ export const updateConversationById = async (id: string, updateData: object) => 
     }
 
     try {
-        const updatedConversation = await Conversation.findOneAndUpdate({_id: id}, updateData, {new: true});
+        const updatedConversation = await Conversation.findOneAndUpdate({_id: id}, updateData, {new: true}).lean();
         if (updatedConversation) {
             return updatedConversation;
         } else {

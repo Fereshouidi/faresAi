@@ -44,6 +44,7 @@ export const getConversationsByUserId_ = async (
 
         const conversations = await Conversation.find({user: userId})
         .sort({ createdAt: -1 })
+        .lean()
 
         res.status(200).json({conversations});
 

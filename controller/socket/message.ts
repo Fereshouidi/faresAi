@@ -94,7 +94,8 @@ export async function getTextAnswer(
                         answer: newMessage,
                         messageIndex: conversationLength
                     });
-                    socket.emit('get-updated-conversation', {...conversation, length: conversationLength});
+                    const updatedConversation = {...conversation, length: conversationLength}
+                    socket.emit('get-updated-conversation', updatedConversation);
                 }
             }
 
