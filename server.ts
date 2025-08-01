@@ -35,9 +35,9 @@ app.get("/", (req, res) => {
   
 });
 
-app.use('/api', MessageRoute);
-app.use('/api', ConversationRoute);
-app.use('/api', UserRoute);
+app.use('/routes', MessageRoute);
+app.use('/routes', ConversationRoute);
+app.use('/routes', UserRoute);
 
 console.log(3);
 
