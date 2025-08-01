@@ -2,13 +2,11 @@ import mongoose from 'mongoose';
 import dotenv from "dotenv";
 
 
-dotenv.config();
+// dotenv.config();
 
-const mongoConn = 
+    // process.env.MONGODB_URI ?
 
-    process.env.MONGODB_URI ?
-
-    mongoose.connect("mongodb+srv://feres997:feres997@cluster0.peiowiq.mongodb.net/faresAi")
+const mongoConn = mongoose.connect("mongodb+srv://feres997:feres997@cluster0.peiowiq.mongodb.net/faresAi")
         .then(() => {
             console.log('MongoDB connected');
         })
@@ -16,6 +14,6 @@ const mongoConn =
             console.error('MongoDB connection error:', err);
         })
 
-    : console.error('error : process.env.MONGODB_URI is undefined !')
+    // : console.error('error : process.env.MONGODB_URI is undefined !')
 
 export default mongoConn;
