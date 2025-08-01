@@ -31,8 +31,8 @@ registerSocketHandlers(io);
 
 console.log({primaryPrompt: primaryPrompt.length});
 
-app.get('/', (req, res) => {
-    res.send('Server is running!');
+app.get("/", (req, res) => {
+  res.send("Server is working!");
 });
 
 const handler = serverless(app);
