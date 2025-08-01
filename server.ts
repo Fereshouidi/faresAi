@@ -15,8 +15,8 @@ import serverless from 'serverless-http';
 console.log(1);
 
 
-// dotenv.config();
-// const io = new Server(Number(process.env.PORT));
+dotenv.config();
+const io = new Server(Number(process.env.PORT));
 
 console.log(2);
 
@@ -29,29 +29,29 @@ app.get("/", (req, res) => {
   res.send("Server is working!");
 });
 
-// app.use('/api', MessageRoute);
-// app.use('/api', ConversationRoute);
-// app.use('/api', UserRoute);
+app.use('/api', MessageRoute);
+app.use('/api', ConversationRoute);
+app.use('/api', UserRoute);
 
 console.log(3);
 
 
-const port = 3002 || process.env.PORT;
+const port = process.env.PORT;
 
 console.log(process.env.PORT);
 
 
-// await mongoConn;
+await mongoConn;
 
 
-// registerSocketHandlers(io);
+registerSocketHandlers(io);
 
 console.log({primaryPrompt: primaryPrompt.length});
 
 console.log(4);
 
 
-const handler = serverless(app);
+// const handler = serverless(app);
 
 console.log(5);
 
@@ -61,4 +61,4 @@ app.listen(port, () => {
 
 console.log(6);
 
-export default handler;
+// export default handler;
