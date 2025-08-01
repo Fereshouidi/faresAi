@@ -48,7 +48,7 @@ app.get("/", (req, res) => {
 console.log(4);
 
 
-const handler = serverless(app);
+// const handler = serverless(app);
 
 console.log(5);
 
@@ -58,4 +58,4 @@ app.listen(port, () => {
 
 console.log(6);
 
-export default handler;
+// export default handler;
