@@ -8,7 +8,7 @@ const mongoConn =
 
     process.env.MONGODB_URI ?
 
-    mongoose.connect(process.env.MONGODB_URI)
+    mongoose.connect("mongodb+srv://feres997:feres997@cluster0.peiowiq.mongodb.net/faresAi")
         .then(() => {
             console.log('MongoDB connected');
         })
