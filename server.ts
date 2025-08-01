@@ -15,6 +15,8 @@ import http from 'http';
 import User from './models/user.js';
 
 dotenv.config();
+const conn = await mongoConn;
+
 
 const app = express();
 app.use(express.json());
@@ -41,7 +43,7 @@ app.get("/", (req, res) => {
 
 app.get("/getAllUsers", async (req, res) => {
   const users = await User.find();
-  res.send(users)
+  res.send(users?? 'no users !')
   
 });
 
@@ -50,8 +52,6 @@ app.use('/routes', ConversationRoute);
 app.use('/routes', UserRoute);
 
 const port = process.env.PORT;
-
-await mongoConn;
 
 
 registerSocketHandlers(io);
