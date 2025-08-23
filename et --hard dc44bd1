@@ -1,0 +1,65 @@
+[33m7f9592c[m[33m ([m[1;36mHEAD[m[33m)[m HEAD@{0}: pull origin main --rebase (start): checkout 7f9592c3032602746379370a624771c97aff8222
+[33mdc44bd1[m[33m ([m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m HEAD@{1}: commit: some edit
+[33m1a6760a[m HEAD@{2}: commit: fixing
+[33m69b9815[m HEAD@{3}: commit: fixing
+[33m7e6eaa5[m HEAD@{4}: commit: fixing
+[33m3e39d7c[m HEAD@{5}: commit: fixing
+[33m6f2c7f5[m HEAD@{6}: commit: fixing
+[33mbbb2272[m HEAD@{7}: commit: fixing
+[33mdfba087[m HEAD@{8}: commit: fixing
+[33mae306d9[m HEAD@{9}: commit: fixing
+[33m9ef0e40[m HEAD@{10}: commit: fixing
+[33m7da9651[m HEAD@{11}: commit: fixing
+[33m87d4b57[m HEAD@{12}: commit: fixing
+[33m359ca3d[m HEAD@{13}: commit: fixing
+[33mb452a30[m HEAD@{14}: commit: fixing
+[33m4ba228b[m HEAD@{15}: commit: fixing
+[33mbcf5708[m HEAD@{16}: commit: fixing
+[33m6c71ea9[m HEAD@{17}: commit: fixing
+[33m640234b[m HEAD@{18}: commit: fixing
+[33m3f37bda[m HEAD@{19}: commit: fixing
+[33mf82e271[m HEAD@{20}: commit: fixing
+[33me3e9b5d[m HEAD@{21}: commit: fixing
+[33ma6db600[m HEAD@{22}: commit: fixing
+[33m71a6738[m HEAD@{23}: commit: fixing
+[33m6abb1e4[m HEAD@{24}: commit: fixing
+[33m8ae6f4c[m HEAD@{25}: commit: fixing
+[33m3a48970[m HEAD@{26}: commit: fixing
+[33mb1e9955[m HEAD@{27}: commit: fixing
+[33m9060791[m HEAD@{28}: commit: fixing
+[33m293ed5f[m HEAD@{29}: commit: fixing
+[33m5d12dfa[m HEAD@{30}: commit: fixing
+[33m659d15e[m HEAD@{31}: commit: fixing
+[33mdf86611[m HEAD@{32}: commit: fixing
+[33me6bc5f6[m HEAD@{33}: commit: fixing
+[33m6630649[m HEAD@{34}: commit: fixing
+[33m16bb41d[m HEAD@{35}: commit: fixing
+[33mf6a9756[m HEAD@{36}: commit: fixing
+[33m13c82d2[m HEAD@{37}: commit: fixing
+[33m01f7e4d[m HEAD@{38}: commit: fixing serverless-http
+[33m87567d4[m HEAD@{39}: commit: fixing serverless-http
+[33md486782[m HEAD@{40}: commit: fixing serverless-http
+[33mda9ff5f[m HEAD@{41}: commit: fixing serverless-http
+[33mf50c61b[m HEAD@{42}: commit: fixing serverless-http
+[33m0893b1a[m HEAD@{43}: commit: fixing serverless-http
+[33me005b37[m HEAD@{44}: commit: use serverless-http
+[33m10034ed[m HEAD@{45}: commit: use serverless-http
+[33m98e1165[m[33m ([m[1;31morigin/old-version[m[33m, [m[1;32mold-version-backup[m[33m, [m[1;32mold-version[m[33m)[m HEAD@{46}: reset: moving to old-version-backup
+[33m6c0b024[m HEAD@{47}: checkout: moving from old-version-backup to main
+[33m98e1165[m[33m ([m[1;31morigin/old-version[m[33m, [m[1;32mold-version-backup[m[33m, [m[1;32mold-version[m[33m)[m HEAD@{48}: reset: moving to 98e1165
+[33m6c0b024[m HEAD@{49}: checkout: moving from main to old-version-backup
+[33m6c0b024[m HEAD@{50}: checkout: moving from old-version to main
+[33m98e1165[m[33m ([m[1;31morigin/old-version[m[33m, [m[1;32mold-version-backup[m[33m, [m[1;32mold-version[m[33m)[m HEAD@{51}: commit: update the memory by summaryzing the conversation and the user information
+[33m40a8869[m HEAD@{52}: checkout: moving from main to old-version
+[33m6c0b024[m HEAD@{53}: commit: the version when was two model memory and reception
+[33m40a8869[m HEAD@{54}: commit: the version when was only one agent handle all of things alone
+[33m9b797e7[m HEAD@{55}: commit: the endpoint style version
+[33mda7d99e[m HEAD@{56}: commit: edit
+[33m186541c[m HEAD@{57}: Branch: renamed refs/heads/temp_branch to refs/heads/main
+[33m186541c[m HEAD@{59}: commit (initial): Initial clean commit
+[33m8a6620c[m HEAD@{60}: commit: first commit
+[33m2cde3b1[m HEAD@{61}: commit: first commit
+[33m09536f9[m HEAD@{62}: commit: first commit
+[33m00cd61a[m HEAD@{63}: commit: first commit
+[33m3d37cd4[m HEAD@{64}: Branch: renamed refs/heads/master to refs/heads/main
+[33m3d37cd4[m HEAD@{66}: commit (initial): first commit
