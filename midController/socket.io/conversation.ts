@@ -1,7 +1,8 @@
 import express from "express";
 import Conversation from "../../models/conversation.js";
-import { createConversation, getConversationLength, getConversationSlice } from "../../controller/socket/conversation.js";
+import { createConversation, getConversationLength, getConversationSlice, getUserConversationsLength } from "../../controller/socket/conversation.js";
 import { ConversationParams } from "../../types.js";
+import { skip } from "node:test";
 
 
 // export const createConversation_ = async (
@@ -33,6 +34,8 @@ export const getConversationsByUserId_ = async (
     // @ts-ignore
     socket: Socket,
     userId: string,
+    skip: number,
+    limit: number
 ) => {
 
     try {
@@ -42,8 +45,11 @@ export const getConversationsByUserId_ = async (
 
         let conversations = await Conversation.find({ user: userId })
         .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit)
         .lean() as ConversationParams[];
 
+        //add length key to the conversation
         const updatedConversations = await Promise.all(
             conversations.map(async (conversation) => {
                 const length = await getConversationLength(conversation._id) as number;
@@ -51,11 +57,15 @@ export const getConversationsByUserId_ = async (
             })
         );
 
+        const userConversationsLength = await getUserConversationsLength(userId);
+
         conversations = updatedConversations;
 
-        console.log({conversations});
-
-        return socket.emit('get-conversations-response', {conversations})
+        return socket.emit('get-conversations-response', {
+            conversations,
+            skip: skip + limit,
+            userConversationsLength
+        })
 
     } catch (err) {
         return socket.emit('get-conversations-response', {error: err})
@@ -83,9 +93,6 @@ export const getConversationSlice_ = async (
 
         const slice = await getConversationSlice(conversationId, skip_, skip_ + 20, 'desc');
 
-        console.log({slice});
-        
-
         res.status(200).json({
             slice, 
             skip: skip_ + 20
@@ -98,5 +105,5 @@ export const getConversationSlice_ = async (
 
 }
 
-
+// export const getConversationSlength_
 

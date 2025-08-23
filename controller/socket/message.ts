@@ -107,7 +107,6 @@ export async function getTextAnswer(
                 socket.emit('receive-message', { messageToWait });
 
                 if (isOnlyTellUserToWaitTag(aiResult)) {
-                    console.log("isOnlyTellUserToWaitTag = true");
                     
                     temporaryMemory.push({
                         role: "model",
@@ -155,9 +154,6 @@ export async function getTextAnswer(
         });    
     }
 }
-
-
-
 
 export const updatePrimaryPrompt = async (prompt: string) => {
 
@@ -239,51 +235,6 @@ export const getAnswerFromDeepSeek = async (model: string, history: MessageParam
 
 }
 
-// export const getAnswerFromDeepSeek = async (model: string, history: MessageParams[], custimizedUserMessage: string) => {    
-
-//     const token = proccess.env.GITHUP_AI_Key;
-//     const endpoint = "https://models.github.ai/inference";
-//     const model_ = "deepseek/DeepSeek-R1";
-
-//     const client = new OpenAI({ baseURL: endpoint, apiKey: token });
-    
-//     try {
-
-//         const custimizedHistory = [
-
-//             {role: "user", content: primaryPrompt},
-//             {role: "system", content: 'ok i am ready'},
-
-//             ...history.map(item => ({
-//                 role: item.role == 'model' ? 'system' : 'user',
-//                 content: item.parts?.[0]?.text || ""
-//             })) as MessageParamsForChatGPt[],
-
-//             {role: "user", content: custimizedUserMessage}
-
-//         ] as MessageParamsForChatGPt[];
-
-//         const response = await client.chat.completions.create({
-//             messages: [
-//                 ...custimizedHistory,
-//                 {role: "user", content: custimizedUserMessage},
-//             ],
-//             temperature: 1.0,
-//             top_p: 1.0,
-//             max_tokens: 2000,
-//             stream: false,
-//             model: model_
-//         });
-
-//         return response.choices[0].message.content;
-
-//     } catch (err) {
-//         throw error('error while getting answer from deepseek', err);
-//     }
-
-
-// }
-
 export const getMessagesByContent = async (
   conversationId: string | object,
   searchTerm: string,
@@ -334,6 +285,21 @@ export const getLastMessage = async (conversationId: string) => {
         .sort({ createdAt: -1 });
 
         return lastMessage;
+    } catch (err) {
+        return error(err);
+    }
+}
+
+export const deleteMessages = async (ids: (string | object)[]) => {
+
+    if (!ids) {
+        return error('messages ids is required');
+    }
+
+    try {
+        await Message.deleteMany({ _id: { $in: ids } });
+
+        return `${ids.length} message has been removed`;
     } catch (err) {
         return error(err);
     }

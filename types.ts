@@ -1,6 +1,7 @@
 import { ObjectId } from "mongoose";
 
 export interface MessageParams {
+    _id?: string | object;
     role: "user" | "model";
     index: number
     parts: MessagePartsParams[];
@@ -63,5 +64,13 @@ export interface ConversationParams {
     length?: number;
     createdAt?: Date;
     updatedAt?: Date;
+}
+
+
+
+export interface ResultParams {
+    status: number
+    message: string
+    data: object | Array<any>
 }
 

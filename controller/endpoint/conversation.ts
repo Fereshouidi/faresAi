@@ -2,6 +2,7 @@ import { error } from "console";
 import Conversation from "../../models/conversation.js";
 import Message from "../../models/message.js";
 import { primaryPrompt } from "../../constants/prompts.js";
+import { ConversationParams } from "../../types.js";
 
 export const getConversationById = async (id: string) => {
     if (!id) {
@@ -94,5 +95,32 @@ export const getConversationLength = async (conversationId: string | object) => 
 
     } catch (err) {
         return error('something went wrong while getting the index of the message in the conversation !')
+    }
+}
+
+export const editConversation = async (updateData: ConversationParams) => {
+    try {
+        const updatedConversation = await Conversation.findByIdAndUpdate(
+            {_id: updateData._id},
+            updateData,
+            {new: true}
+        )
+        
+        if (!updatedConversation) {
+            return {
+                status: 404,
+                message: `there is no conversation with id = ${updateData._id}!`
+            }
+        }
+
+        return {
+            status: 201,
+            message: 'conversation has been updated successfully',
+            updatedConversation
+        }
+        
+    } catch (err) {
+        console.log(err);
+        return err;
     }
 }

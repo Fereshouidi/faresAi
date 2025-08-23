@@ -3,8 +3,8 @@ import { getConversationsByUserId_ } from '../midController/socket.io/conversati
 
 export default function conversationSocket(socket: Socket, io: Server) {
 
-  socket.on('get-conversations', async ({ userId }) => {
-    getConversationsByUserId_(socket,  userId);
+  socket.on('get-conversations', async ({ userId, limit, skip }) => {
+    getConversationsByUserId_(socket,  userId, skip, limit);
   });
   
 }

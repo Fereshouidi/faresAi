@@ -1,6 +1,8 @@
 import express from "express";
-import { createConversation, getConversationSlice } from "../../controller/endpoint/conversation.js";
+import { createConversation, editConversation, getConversationSlice } from "../../controller/endpoint/conversation.js";
 import Conversation from "../../models/conversation.js";
+import { deleteconversation } from "../../controller/socket/conversation.js";
+import { ResultParams } from "../../types.js";
 
 
 export const createConversation_ = async (
@@ -74,9 +76,6 @@ export const getConversationSlice_ = async (
 
         const slice = await getConversationSlice(conversationId, skip_, skip_ + 20, 'desc');
 
-        console.log({slice});
-        
-
         res.status(200).json({
             slice, 
             skip: skip_ + 20
@@ -89,5 +88,66 @@ export const getConversationSlice_ = async (
 
 }
 
+export const deleteconversation_ = async (
+    // @ts-ignore
+    req: Request<{}, any, any, ParsedQs, Record<string, any>>,
+    // @ts-ignore 
+    res: Response<any, Record<string, any>, number>
+) => {
 
+    const { conversationId } = req.query;
+
+    try {
+
+        if (!conversationId) {
+            return res.status(404).json({error: 'conversationId is required !'});
+        }
+
+        const result = await deleteconversation(conversationId);
+        
+        res.status(200).json(result);
+
+    } catch (err) {
+        res.status(500).json({error: err});
+    }
+
+
+}
+
+export const editConversation_ = async (
+    // @ts-ignore
+    req: Request<{}, any, any, ParsedQs, Record<string, any>>,
+    // @ts-ignore 
+    res: Response<any, Record<string, any>, number>
+) => {
+
+    const { updatedData } = req.body;
+
+    console.log({updatedData});
+    
+
+    try {
+
+        if (!updatedData) {
+            return res.status(404).json({error: 'updatedData is required !'});
+        }
+
+        const result = await editConversation(updatedData) as ResultParams;
+
+        if (result?.status == 404) {
+            return res.status(404).json({error: result.message});
+        }
+
+        if (result?.status == 500) {
+            return res.status(500).json({error: result.message});
+        }
+        
+        res.status(201).json(result);
+
+    } catch (err) {
+        res.status(500).json({error: err});
+    }
+
+
+}
 

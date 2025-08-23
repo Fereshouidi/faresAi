@@ -34,6 +34,7 @@ export const getAnswer_ = async (
       } else {
         const conversationTittle = await createConversationTittle(message) as unknown as string;        
         conversation = await createConversation(userId, conversationTittle) as ConversationParams;
+        conversation = {...conversation, length: 1}
         socket.emit('add-conversation', {newConversation: conversation});
       }
 
@@ -46,6 +47,8 @@ export const getAnswer_ = async (
         .limit(maxMessageToGet)
         .sort({ createdAt: -1 }) as MessageParams[];
 
+      console.log({conversation});
+      
       const conversationLength = (await getConversationLength(conversation._id)) as number - 1;
 
       if ( conversationLength == maxMessageToGet || (conversationLength % maxMessageToGet) == 0) {
