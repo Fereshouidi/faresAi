@@ -10,7 +10,7 @@ import OpenAI from "openai";
 import { getPureModelMessage, getPureUserMessage, isOnlyTellUserToWaitTag } from "../../utils/helper.js";
 import { Socket } from "socket.io";
 import { ObjectId } from "mongoose";
-import { maxMessageToGet } from "../../constants/maxMessage.js";
+import { geminiKey, maxMessageToGet } from "../../constants/index.js";
 
 export const createMessage = async (conversationId: string | ObjectId, userId: string | ObjectId, role: string, parts: MessagePartsParams[], type: string, socket?: Socket,) => {
     
@@ -174,7 +174,7 @@ export const updatePrimaryPrompt = async (prompt: string) => {
 export const getAnswerFromGemini = async (model: string, history: MessageParams[], customizedUserMessage: string) => {
 
     const ai = new GoogleGenAI({
-        apiKey: "AIzaSyDjLld0ynrVEvbIFK3inQCp4tR3UEScaxs",
+        apiKey: geminiKey,
     });
     
     const customizedHistory = history.map(msg => ({

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { maxMessageToGet } from "../constants/maxMessage.js";
+import { maxMessageToGet } from "../constants/index.js";
 
 const conversationSchema = new mongoose.Schema({
     user: {

@@ -135,10 +135,12 @@ export const editConversation_ = async (
         const result = await editConversation(updatedData) as ResultParams;
 
         if (result?.status == 404) {
+            console.error("error : " + result.message);
             return res.status(404).json({error: result.message});
         }
 
         if (result?.status == 500) {
+            console.error("error : " + result.message);
             return res.status(500).json({error: result.message});
         }
         

@@ -1,4 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
+import { geminiKey } from "../constants/index.js";
 
 export const getPureModelMessage = (message: string) => {
 
@@ -28,7 +29,7 @@ export const isOnlyTellUserToWaitTag = (text: string) => {
 export const createConversationTittle = async (firstMessage: string) => {
 
     const ai = new GoogleGenAI({
-        apiKey: "AIzaSyDjLld0ynrVEvbIFK3inQCp4tR3UEScaxs",
+        apiKey: geminiKey,
     });
     
 

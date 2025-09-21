@@ -5,7 +5,7 @@ import { ConversationParams, MessageParams, UserParams } from "../../types.js";
 import { custimizeUserMessage } from "../../constants/promptsComponnent/userMessage.js";
 import { Socket } from "socket.io";
 import { createConversationTittle } from "../../utils/helper.js";
-import { maxMessageToGet } from "../../constants/maxMessage.js";
+import { maxMessageToGet } from "../../constants/index.js";
 import { summarizeConversation_updateNotes } from "../../agents/summeryAgent/agent.js";
 import User from "../../models/user.js";
 

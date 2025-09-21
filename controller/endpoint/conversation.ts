@@ -98,29 +98,32 @@ export const getConversationLength = async (conversationId: string | object) => 
     }
 }
 
-export const editConversation = async (updateData: ConversationParams) => {
+export const editConversation = async (updatedData: ConversationParams) => {
     try {
-        const updatedConversation = await Conversation.findByIdAndUpdate(
-            {_id: updateData._id},
-            updateData,
+        const updatedConversation_ = await Conversation.findByIdAndUpdate(
+            {_id: updatedData._id},
+            updatedData,
             {new: true}
-        )
+        );
         
-        if (!updatedConversation) {
+        if (!updatedConversation_) {
             return {
                 status: 404,
-                message: `there is no conversation with id = ${updateData._id}!`
+                message: `there is no conversation with id = ${updatedData._id}!`
             }
         }
+
+        const updatedConversation = updatedConversation_.toObject();
+        const length = await getConversationLength(updatedConversation._id)
 
         return {
             status: 201,
             message: 'conversation has been updated successfully',
-            updatedConversation
+            updatedConversation: {...updatedConversation, length}
         }
         
     } catch (err) {
-        console.log(err);
+        console.log({err});
         return err;
     }
 }
