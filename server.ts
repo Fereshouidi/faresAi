@@ -62,6 +62,9 @@ registerSocketHandlers(io);
 
 console.log({primaryPrompt: primaryPrompt.length});
 
+console.log();
+
+
 // const handler = serverless(app);
 
 server.listen(port, () => {

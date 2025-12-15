@@ -11,11 +11,15 @@ export const createUser_ =  async (
     res: Response<any, Record<string, any>, number>
 ) => {
 
-    const {name, familyName, email, password} = req.body as unknown as UserParams;
-
     try {
+
+        const {name, familyName, email, password} = req.body as unknown as UserParams;
+
+        console.log({name, familyName, email, password});
+        
+
         if (!name || !familyName || !email || !password) {
-            res.status(404).json({error: 'All fields are required !'})
+            return res.status(404).json({error: 'All fields are required !'})
         }
 
         const newUser = await createUser({
@@ -25,10 +29,14 @@ export const createUser_ =  async (
             password
         });
 
+        console.log({newUser});
+        
         res.status(200).json({newUser});
 
     } catch (err) {
-        res.status(500).json({error: err});
+        console.log({err});
+        
+        return res.status(500).json({error: err});
     }
 
 
