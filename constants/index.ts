@@ -1,2 +1,2 @@
 export const maxMessageToGet = 10;
-export const geminiKey = "AIzaSyCblH67-Azrj54UgRWfAkAL24sYPQtdoI8";
+export const geminiKey = "AIzaSyAL68-6iGR0kDYyPLWq3XpZqhj5hVST1UM";
